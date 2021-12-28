@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button onclick="getRepos()">Get Ready</button>
+    <div id="load">Get demo one</div>
+    <div id="show"></div>
+    <button data-page="demoone.html">Get Demo one</button>
+    <button data-page="demotwo.html">Get Demo two</button>
+    <script>
+        // deal with network request and status codes
+        // Make Function to do request
+        function getRepos(){
+            // Assign the request object to variable
+            var myRequest = new XMLHttpRequest()
+
+            // On ready state change => function called when ready state change
+            myRequest.onreadystatechange = function(){
+                /* console.log(status); */
+
+                /*
+                    Ready state => The status of the request
+                    [0] Request not initialized
+                    [1] Server Connection Established 
+                    [2] Request Received
+                    [3] Processing Request
+                    [4] Request is finished and response is ready 
+                    Status => response status code
+                    [200] Ok
+                */
+               // if request is finished and response is readu and staus code = 200 (ok) output the response text
+               if(this.readyState === 4 && this.status === 200){
+                    //console.log(this.responseText);
+                    //console.log(JSON.parse(this.responseText));
+                   //console.log(myRequest); 
+
+                   // convert responsetext to js object
+                   var myjsObject = JSON.parse(this.responseText),
+                        myText = "";
+                        for (var i = 0; i < myjsObject.length; i++){
+                            console.log(myjsObject[i]);
+                            myText +=  myjsObject[i].username + "<br>";
+                            console.log(myText);
+                            document.getElementById('show').innerHTML = myText
+                        }
+               }
+            }
+            // open and send method
+            //XMLHttpRequest.open(Method, URL, Async, Async, User, Password)
+            myRequest.open("GET", "object.json", true)
+            myRequest.send()
+        }
+        
+        //
+       
+        </script>
+         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script>
+            // jQuery - Ajax Load
+       /*       $(function(){
+          
+                $("button").on("click", function(){
+                    $("#load").load($(this).data("page"), + ".content", function(resTXT, stTxt, xhr){
+                if(stTxt === "success"){
+                    console.log("load success");
+                }
+            })
+                })
+        }) */
+        /*jQuery - $ Get And $ Post*/
+       /*  $(function(){
+            $.get("demoone.html", function(one, two, three){
+                console.log(one);
+                console.log(two);
+                console.log(three);
+            })
+        }) */
+       /*  $(function(){
+            $.post("demoone.html", {name: "karim", lastlogin: "today"}, function(data, status, xhr){
+                console.log(object);
+            })
+        }) */
+        /* ajaw part 1*/
+        $(function(){
+            $("button").on("click", function(){
+                $.ajax({
+                    // type : post // alias for method => jquery begore 1.9.0
+                    // cache: false, // cache the request, default is true
+                    // timeout: 3000, // asynchronous or no 
+                    // datatype: 'html' // data expected from the server response, default is intel guess
+                    //username: "",
+                    //password: "soulsoul",
+                    // content type: "multipart/form-data", // content type for the request, default is application
+                    method: "POST", //method used for the request 
+                    url: "auths.php", // url to send request 
+                    data: {name: "osama", lastlogin: "2 days ago "},
+                    beforeSend: function(xhr){
+                        console.log("before send");
+                    },
+                    success: function(data, status, xhr) {
+                        // function to run when request succeeded
+                        console.log(data); //data
+                        console.log(status);// request status
+                        console.log(xhr); // xhr object;
+                        console.log("success");
+                    },
+                    error: function(xhr, status, error){
+                        console.log(xhr); //xhr object
+                        console.log(status); // request status
+                        console.log(error); // error message;
+                        console.log("error");
+                    },
+                    complete: function(xhr, status){
+                        // function to run  when requested is complete
+                        console.log(xhr);
+                        console.log(status);
+                        console.log("complete");
+                    }
+                })
+            })
+        })
+        </script>
+   
+</body>
+</html>
